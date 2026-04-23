@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Caveat, DM_Sans, Playfair_Display } from "next/font/google";
+import { BananaLeafLoader } from "./components/BananaLeafLoader";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -33,7 +34,10 @@ export default function RootLayout({
       lang="en"
       className={`${dmSans.variable} ${playfair.variable} ${caveat.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full min-w-0 flex-col">{children}</body>
+      <body className="flex min-h-full min-w-0 flex-col">
+        <BananaLeafLoader />
+        {children}
+      </body>
     </html>
   );
 }

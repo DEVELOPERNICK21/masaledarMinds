@@ -166,27 +166,27 @@ export function CompetitionHero({
       <div className="relative z-10 mx-auto box-border flex w-full min-w-0 max-w-[1200px] flex-col gap-6 pb-4 pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] pt-1 sm:gap-8 sm:px-5 sm:pb-6 sm:pt-2 lg:grid lg:grid-cols-12 lg:items-center lg:gap-x-8 lg:gap-y-6 lg:px-6 lg:pb-5 xl:gap-x-10">
         {/* Copy: first on mobile (order-1), right column on desktop */}
         <div className="order-1 flex min-w-0 w-full flex-col gap-3 sm:gap-4 lg:order-2 lg:col-span-7 lg:gap-5">
-          <div className="flex min-w-0 flex-wrap items-center gap-2">
+          <div className="flex min-w-0 flex-wrap items-center justify-center gap-2 sm:justify-start">
             <span
-              className="h-px w-6 shrink-0 bg-gradient-to-r from-[#ffc14a] to-transparent sm:w-8"
+              className="hidden h-px w-6 shrink-0 bg-gradient-to-r from-[#ffc14a] to-transparent sm:block sm:w-8"
               aria-hidden
             />
-            <p className="min-w-0 text-[0.58rem] font-bold uppercase leading-snug tracking-[0.14em] text-[rgb(255_210_150/0.78)] sm:text-[0.62rem] sm:tracking-[0.22em]">
+            <p className="min-w-0 text-center text-[0.58rem] font-bold uppercase leading-snug tracking-[0.14em] text-[rgb(255_210_150/0.78)] sm:text-left sm:text-[0.62rem] sm:tracking-[0.22em]">
               Masaledar Minds · No-fire
             </p>
           </div>
 
           <h1
             id="page-title"
-            className="w-full min-w-0 max-w-full break-words [overflow-wrap:anywhere] font-[family-name:var(--font-playfair)] text-pretty text-[clamp(1.25rem,calc(0.28rem+5.2vw),3.85rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#fff9f2] drop-shadow-[0_2px_0_rgb(0_0_0/0.35)] sm:text-[clamp(2.1rem,5.2vw+0.2rem,3.85rem)] sm:leading-[1.02] sm:tracking-[-0.035em]"
+            className="w-full min-w-0 max-w-full break-words [overflow-wrap:anywhere] font-[family-name:var(--font-playfair)] text-pretty text-center text-[clamp(1.55rem,calc(0.42rem+7.2vw),3.85rem)] font-extrabold leading-[1.06] tracking-[-0.03em] text-[#fff9f2] drop-shadow-[0_2px_0_rgb(0_0_0/0.35)] sm:text-left sm:text-[clamp(2.1rem,5.2vw+0.2rem,3.85rem)] sm:leading-[1.02] sm:tracking-[-0.035em]"
           >
             <span className="block">{HERO_HEADLINE_LEAD}</span>
-            <span className="mt-1 block min-w-0 max-w-full break-words bg-gradient-to-r from-[#ffd875] via-[#ffb347] to-[#ff9a6c] bg-clip-text font-[family-name:var(--font-playfair)] text-pretty text-[clamp(1.05rem,calc(0.18rem+4.8vw),2.75rem)] text-transparent drop-shadow-none sm:mt-1 sm:text-[clamp(1.45rem,3.8vw+0.15rem,2.75rem)]">
+            <span className="mt-1 block min-w-0 max-w-full break-words bg-gradient-to-r from-[#ffd875] via-[#ffb347] to-[#ff9a6c] bg-clip-text font-[family-name:var(--font-playfair)] text-pretty text-[clamp(1.28rem,calc(0.32rem+6.2vw),2.75rem)] text-transparent drop-shadow-none sm:mt-1 sm:text-[clamp(1.45rem,3.8vw+0.15rem,2.75rem)]">
               {HERO_HEADLINE_TAIL}
             </span>
           </h1>
 
-          <p className="max-w-xl min-w-0 text-[0.88rem] font-semibold leading-snug tracking-[-0.01em] text-[rgb(255_236_220/0.92)] sm:text-[0.95rem] sm:text-base">
+          <p className="max-w-xl min-w-0 text-center text-[0.88rem] font-semibold leading-snug tracking-[-0.01em] text-[rgb(255_236_220/0.92)] sm:text-left sm:text-[0.95rem] sm:text-base">
             {HERO_SUBLINE}
           </p>
 
@@ -196,18 +196,23 @@ export function CompetitionHero({
           />
 
           <ul
-            className="flex w-full min-w-0 flex-col gap-2 sm:grid sm:grid-cols-3 sm:gap-2"
+            className="grid w-full min-w-0 grid-cols-3 gap-2 sm:gap-2"
             aria-label="Engineering dimensions"
           >
             {DIMENSIONS.map((dim) => (
               <li
                 key={dim.label}
-                className="flex w-full min-w-0 max-w-full items-center justify-center gap-2 rounded-full border border-[rgb(255_200_130/0.28)] bg-[rgb(12_4_4/0.72)] px-2.5 py-2.5 text-[0.65rem] font-bold uppercase leading-tight tracking-[0.04em] text-[rgb(255_244_230/0.96)] sm:px-3 sm:py-2 sm:text-[0.68rem] sm:tracking-[0.08em]"
+                className="flex min-h-[4.25rem] min-w-0 flex-col items-center justify-center gap-1 rounded-full border border-[rgb(255_200_130/0.28)] bg-[rgb(12_4_4/0.72)] px-1 py-2.5 text-[0.72rem] font-bold uppercase leading-tight tracking-[0.02em] text-[rgb(255_244_230/0.96)] sm:min-h-0 sm:flex-row sm:gap-2 sm:px-3 sm:py-2 sm:text-[0.68rem] sm:tracking-[0.08em]"
               >
-                <span className="shrink-0 text-base leading-none sm:text-base" aria-hidden>
+                <span
+                  className="shrink-0 text-xl leading-none sm:text-base"
+                  aria-hidden
+                >
                   {dim.icon}
                 </span>
-                <span className="min-w-0 text-center [overflow-wrap:anywhere]">{dim.label}</span>
+                <span className="min-w-0 text-center [overflow-wrap:anywhere] sm:text-left">
+                  {dim.label}
+                </span>
               </li>
             ))}
           </ul>

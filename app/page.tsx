@@ -194,17 +194,19 @@ export default function Home() {
         Skip to main content
       </a>
 
-      <header className="brand-fixed site-brand-pill">
+      <header className="brand-fixed site-brand-pill flex flex-col items-center justify-center gap-2 text-center sm:inline-flex sm:flex-row sm:items-center sm:justify-start sm:gap-[0.6rem] sm:text-left">
         <Image
           src="/images/company-dark-logo.webp"
           alt="Masaledar Minds"
           width={120}
           height={40}
-          className="site-brand-logo"
+          className="site-brand-logo shrink-0 max-sm:mx-auto"
           priority
         />
-        <div className="site-brand-copy">
-          <span className="site-brand-text">Masaledar Minds</span>
+        <div className="site-brand-copy flex w-full min-w-0 flex-col items-center sm:w-auto sm:items-start">
+          <span className="site-brand-text max-sm:text-[0.8rem] max-sm:tracking-[0.12em]">
+            Masaledar Minds
+          </span>
           <span className="site-brand-strategy">{MASALEDAR_MINDS_TAGLINE}</span>
         </div>
       </header>
