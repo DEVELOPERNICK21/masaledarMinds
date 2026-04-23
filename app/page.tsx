@@ -183,7 +183,7 @@ export default function Home() {
     : selectedDish.ingredients.slice(0, 4);
 
   return (
-    <div className="cinema-shell relative min-h-screen overflow-hidden text-[var(--hero-text)]">
+    <div className="cinema-shell relative min-h-dvh min-w-0 flex-1 overflow-x-clip text-[var(--hero-text)]">
       <div className="cinema-noise" aria-hidden />
       <div className="cinema-vignette" aria-hidden />
       <div className="cinema-ambient amber" />
@@ -238,7 +238,7 @@ export default function Home() {
       <main
         id="main-content"
         tabIndex={-1}
-        className="scroll-main relative h-screen snap-y snap-mandatory overflow-y-auto overflow-x-hidden outline-none"
+        className="scroll-main relative h-[100dvh] max-h-[100dvh] min-h-0 min-w-0 snap-y snap-mandatory overflow-y-auto overflow-x-clip outline-none"
       >
         <section
           id="hero"

@@ -130,20 +130,19 @@ body {
 
 .brand-fixed {
   position: fixed;
-  top: 0.85rem;
+  top: max(0.65rem, env(safe-area-inset-top, 0px));
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  max-width: min(96vw, 26rem);
+  gap: 0.6rem;
+  max-width: min(calc(100vw - 1.25rem), 28rem);
   border-radius: 9999px;
   border: 1px solid rgb(255 205 114 / 40%);
   background: rgb(5 1 1 / 65%);
   backdrop-filter: blur(7px);
-  padding: 0.35rem 0.75rem;
-  font-size: 0.74rem;
+  padding: 0.5rem 0.95rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -164,10 +163,10 @@ body {
 }
 
 .site-brand-logo {
-  height: 2.1rem;
+  height: 2.45rem;
   width: auto;
-  max-height: 2.35rem;
-  max-width: 9.5rem;
+  max-height: 2.75rem;
+  max-width: 10rem;
   object-fit: contain;
   border-radius: 0.55rem;
 }
@@ -182,18 +181,31 @@ body {
 .site-brand-text {
   color: rgb(255 236 214 / 92%);
   letter-spacing: 0.1em;
-  font-size: 0.65rem;
-  line-height: 1.2;
+  font-size: 0.78rem;
+  line-height: 1.22;
+}
+
+@media (min-width: 640px) {
+  .site-brand-text {
+    font-size: 0.82rem;
+    letter-spacing: 0.11em;
+  }
 }
 
 .site-brand-strategy {
   font-family: var(--font-playfair), Georgia, serif;
-  font-size: 0.58rem;
+  font-size: 0.66rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: none;
   color: rgb(255 210 160 / 0.78%);
-  line-height: 1.25;
+  line-height: 1.28;
+}
+
+@media (min-width: 640px) {
+  .site-brand-strategy {
+    font-size: 0.72rem;
+  }
 }
 
 .scene-nav {
@@ -364,6 +376,7 @@ body {
 
 .cinema-scene {
   min-height: 100svh;
+  min-width: 0;
   display: grid;
   align-items: center;
   position: relative;
@@ -371,7 +384,10 @@ body {
 }
 
 .cinema-inner {
+  box-sizing: border-box;
   width: min(1200px, 100%);
+  max-width: 100%;
+  min-width: 0;
   margin-inline: auto;
   position: relative;
   z-index: 1;
@@ -698,19 +714,34 @@ body {
 
 @media (max-width: 640px) {
   .brand-fixed {
-    top: 0.6rem;
-    font-size: 0.62rem;
-    letter-spacing: 0.06em;
+    top: max(0.5rem, env(safe-area-inset-top, 0px));
+    max-width: min(calc(100vw - 1rem), 24rem);
+    padding: 0.48rem 0.8rem;
+    gap: 0.5rem;
+  }
+
+  .site-brand-logo {
+    height: 2.35rem;
+    max-height: 2.55rem;
+  }
+
+  .site-brand-text {
+    font-size: 0.74rem;
+    letter-spacing: 0.09em;
+  }
+
+  .site-brand-strategy {
+    font-size: 0.63rem;
   }
 
   .scene-nav {
     top: auto;
-    bottom: 0.5rem;
+    bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
     right: 50%;
     transform: translateX(50%);
     grid-auto-flow: column;
     gap: 0.28rem;
-    max-width: calc(100vw - 0.75rem);
+    max-width: min(calc(100vw - 1rem), calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)));
   }
 
   .section-nav-link {
@@ -1361,6 +1392,13 @@ body {
   scroll-padding-top: 4.5rem;
 }
 
+@media (max-width: 1023px) {
+  .scroll-main {
+    /* Space for fixed bottom section nav + home indicator */
+    scroll-padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 5.75rem);
+  }
+}
+
 .section-pad {
   padding-top: 3.5rem;
   padding-bottom: 3.5rem;
@@ -1423,10 +1461,21 @@ body {
   min-height: auto;
 }
 
+@media (max-width: 1023px) {
+  .cinema-scene.hero-scene {
+    padding-top: calc(5.85rem + env(safe-area-inset-top, 0px));
+    padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+    padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+    /* Clear fixed bottom pill nav (~3.2rem row + gaps + safe area) */
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 6.5rem);
+  }
+}
+
 @media (min-width: 1024px) {
   .cinema-scene.hero-scene {
     align-items: center;
     min-height: 100svh;
+    padding: 4.75rem 2rem 2rem;
   }
 }
 

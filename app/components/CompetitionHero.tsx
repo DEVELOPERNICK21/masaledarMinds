@@ -91,10 +91,10 @@ function TypewriterWarningLine({ revealInstantly }: { revealInstantly: boolean }
 }
 
 const ctaPrimaryClass =
-  "relative inline-flex w-full min-h-[3rem] items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-[#ffb347] via-[#ff7a1c] to-[#ff5a6a] px-5 text-[0.68rem] font-extrabold uppercase tracking-[0.12em] text-[#1a0505] shadow-[0_4px_0_rgb(120_30_10/35%),0_14px_36px_rgb(255_100_40/28%)] transition-shadow duration-200 sm:w-auto sm:px-8 sm:text-[0.72rem] sm:tracking-[0.14em]";
+  "relative box-border inline-flex w-full min-w-0 max-w-full min-h-[3rem] shrink items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-[#ffb347] via-[#ff7a1c] to-[#ff5a6a] px-3 text-center text-[0.62rem] font-extrabold uppercase leading-tight tracking-[0.06em] text-[#1a0505] shadow-[0_4px_0_rgb(120_30_10/35%),0_14px_36px_rgb(255_100_40/28%)] transition-shadow duration-200 [overflow-wrap:anywhere] whitespace-normal text-balance sm:w-auto sm:shrink-0 sm:px-8 sm:text-[0.72rem] sm:tracking-[0.14em] sm:whitespace-nowrap";
 
 const ctaSecondaryClass =
-  "inline-flex w-full min-h-[3rem] items-center justify-center rounded-full border border-[rgb(255_200_130/40%)] bg-[rgb(255_255_255/6%)] px-5 text-[0.68rem] font-extrabold uppercase tracking-[0.1em] text-[rgb(255_240_224/95%)] backdrop-blur-sm transition-colors duration-200 hover:border-[rgb(255_215_150/55%)] hover:bg-[rgb(255_255_255/10%)] sm:w-auto sm:px-7 sm:text-[0.72rem] sm:tracking-[0.12em]";
+  "box-border inline-flex w-full min-w-0 max-w-full min-h-[3rem] shrink items-center justify-center rounded-full border border-[rgb(255_200_130/40%)] bg-[rgb(255_255_255/6%)] px-3 text-center text-[0.62rem] font-extrabold uppercase leading-tight tracking-[0.06em] text-[rgb(255_240_224/95%)] backdrop-blur-sm transition-colors duration-200 hover:border-[rgb(255_215_150/55%)] hover:bg-[rgb(255_255_255/10%)] [overflow-wrap:anywhere] whitespace-normal text-balance sm:w-auto sm:shrink-0 sm:px-7 sm:text-[0.72rem] sm:tracking-[0.12em] sm:whitespace-nowrap";
 
 type CompetitionHeroProps = {
   dishes: CompetitionHeroDish[];
@@ -160,10 +160,10 @@ export function CompetitionHero({
   const indexLabel = `${String(activeIndex + 1).padStart(2, "0")} / ${String(dishes.length).padStart(2, "0")}`;
 
   return (
-    <div className="relative w-full min-w-0 overflow-x-hidden">
+    <div className="relative w-full min-w-0 max-w-[100%]">
       <HeroAmbientMotion />
 
-      <div className="relative z-10 mx-auto flex w-full min-w-0 max-w-[1200px] flex-col gap-6 px-3 pb-5 pt-1 sm:gap-8 sm:px-5 sm:pb-6 sm:pt-2 lg:grid lg:grid-cols-12 lg:items-center lg:gap-x-8 lg:gap-y-6 lg:px-6 xl:gap-x-10">
+      <div className="relative z-10 mx-auto box-border flex w-full min-w-0 max-w-[1200px] flex-col gap-6 pb-4 pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] pt-1 sm:gap-8 sm:px-5 sm:pb-6 sm:pt-2 lg:grid lg:grid-cols-12 lg:items-center lg:gap-x-8 lg:gap-y-6 lg:px-6 lg:pb-5 xl:gap-x-10">
         {/* Copy: first on mobile (order-1), right column on desktop */}
         <div className="order-1 flex min-w-0 w-full flex-col gap-3 sm:gap-4 lg:order-2 lg:col-span-7 lg:gap-5">
           <div className="flex min-w-0 flex-wrap items-center gap-2">
@@ -178,15 +178,15 @@ export function CompetitionHero({
 
           <h1
             id="page-title"
-            className="break-words font-[family-name:var(--font-playfair)] text-balance text-[clamp(1.65rem,7.5vw+0.15rem,3.85rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-[#fff9f2] drop-shadow-[0_2px_0_rgb(0_0_0/0.35)] sm:text-[clamp(2.1rem,5.2vw+0.2rem,3.85rem)]"
+            className="w-full min-w-0 max-w-full break-words [overflow-wrap:anywhere] font-[family-name:var(--font-playfair)] text-pretty text-[clamp(1.25rem,calc(0.28rem+5.2vw),3.85rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-[#fff9f2] drop-shadow-[0_2px_0_rgb(0_0_0/0.35)] sm:text-[clamp(2.1rem,5.2vw+0.2rem,3.85rem)] sm:leading-[1.02] sm:tracking-[-0.035em]"
           >
             <span className="block">{HERO_HEADLINE_LEAD}</span>
-            <span className="mt-1 block bg-gradient-to-r from-[#ffd875] via-[#ffb347] to-[#ff9a6c] bg-clip-text font-[family-name:var(--font-playfair)] text-[clamp(1.2rem,5.5vw+0.1rem,2.75rem)] text-transparent drop-shadow-none sm:mt-1 sm:text-[clamp(1.45rem,3.8vw+0.15rem,2.75rem)]">
+            <span className="mt-1 block min-w-0 max-w-full break-words bg-gradient-to-r from-[#ffd875] via-[#ffb347] to-[#ff9a6c] bg-clip-text font-[family-name:var(--font-playfair)] text-pretty text-[clamp(1.05rem,calc(0.18rem+4.8vw),2.75rem)] text-transparent drop-shadow-none sm:mt-1 sm:text-[clamp(1.45rem,3.8vw+0.15rem,2.75rem)]">
               {HERO_HEADLINE_TAIL}
             </span>
           </h1>
 
-          <p className="max-w-xl text-[0.88rem] font-semibold leading-snug tracking-[-0.01em] text-[rgb(255_236_220/0.92)] sm:text-[0.95rem] sm:text-base">
+          <p className="max-w-xl min-w-0 text-[0.88rem] font-semibold leading-snug tracking-[-0.01em] text-[rgb(255_236_220/0.92)] sm:text-[0.95rem] sm:text-base">
             {HERO_SUBLINE}
           </p>
 
@@ -196,18 +196,18 @@ export function CompetitionHero({
           />
 
           <ul
-            className="grid w-full min-w-0 grid-cols-3 gap-2"
+            className="flex w-full min-w-0 flex-col gap-2 sm:grid sm:grid-cols-3 sm:gap-2"
             aria-label="Engineering dimensions"
           >
             {DIMENSIONS.map((dim) => (
               <li
                 key={dim.label}
-                className="flex min-w-0 items-center justify-center gap-1.5 rounded-full border border-[rgb(255_200_130/0.28)] bg-[rgb(12_4_4/0.72)] px-1.5 py-2 text-[0.58rem] font-bold uppercase leading-tight tracking-[0.04em] text-[rgb(255_244_230/0.96)] sm:gap-2 sm:px-3 sm:text-[0.68rem] sm:tracking-[0.08em]"
+                className="flex w-full min-w-0 max-w-full items-center justify-center gap-2 rounded-full border border-[rgb(255_200_130/0.28)] bg-[rgb(12_4_4/0.72)] px-2.5 py-2.5 text-[0.65rem] font-bold uppercase leading-tight tracking-[0.04em] text-[rgb(255_244_230/0.96)] sm:px-3 sm:py-2 sm:text-[0.68rem] sm:tracking-[0.08em]"
               >
-                <span className="shrink-0 text-sm leading-none sm:text-base" aria-hidden>
+                <span className="shrink-0 text-base leading-none sm:text-base" aria-hidden>
                   {dim.icon}
                 </span>
-                <span className="min-w-0 text-center break-words">{dim.label}</span>
+                <span className="min-w-0 text-center [overflow-wrap:anywhere]">{dim.label}</span>
               </li>
             ))}
           </ul>
@@ -242,24 +242,24 @@ export function CompetitionHero({
             </div>
           </div>
 
-          <div className="flex w-full min-w-0 flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+          <div className="flex w-full min-w-0 max-w-full flex-col gap-2.5 py-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 sm:py-0">
             <motion.a
               href={`#${spotlightId}`}
               className={ctaPrimaryClass}
               whileHover={
                 reduce
                   ? undefined
-                  : { scale: 1.03, boxShadow: "0 6px 0 rgb(120 30 10 / 35%), 0 20px 48px rgb(255 120 50 / 38%)" }
+                  : { scale: 1.02, boxShadow: "0 6px 0 rgb(120 30 10 / 35%), 0 20px 48px rgb(255 120 50 / 38%)" }
               }
-              whileTap={reduce ? undefined : { scale: 0.98 }}
+              whileTap={reduce ? undefined : { scale: 0.99 }}
             >
               Judge Our Craft
             </motion.a>
             <motion.a
               href={`#${spotlightId}`}
               className={ctaSecondaryClass}
-              whileHover={reduce ? undefined : { scale: 1.02 }}
-              whileTap={reduce ? undefined : { scale: 0.98 }}
+              whileHover={reduce ? undefined : { scale: 1.01 }}
+              whileTap={reduce ? undefined : { scale: 0.99 }}
             >
               Experience The Menu
             </motion.a>
@@ -275,7 +275,7 @@ export function CompetitionHero({
         </div>
 
         {/* Image column: second on mobile, left on desktop */}
-        <div className="order-2 w-full min-w-0 max-w-full shrink-0 justify-self-center sm:max-w-md lg:order-1 lg:col-span-5 lg:max-w-none lg:justify-self-stretch">
+        <div className="order-2 mb-1 w-full min-w-0 max-w-full shrink-0 justify-self-center sm:mb-0 sm:max-w-md lg:order-1 lg:col-span-5 lg:max-w-none lg:justify-self-stretch">
           <motion.div
             className="relative mx-auto w-full max-w-[min(100%,20rem)] lg:max-w-none"
             animate={reduce ? { y: 0 } : { y: [0, -7, 0] }}
@@ -343,8 +343,8 @@ export function CompetitionHero({
                     ? "border-[#ffc14a] shadow-[0_0_0_1px_rgb(255_200_100/0.35)]"
                     : "border-[rgb(255_255_255/0.12)] hover:border-[rgb(255_200_120/0.45)]"
                 }`}
-                whileHover={reduce ? undefined : { scale: 1.06 }}
-                whileTap={reduce ? undefined : { scale: 0.95 }}
+                whileHover={reduce ? undefined : { scale: 1.03 }}
+                whileTap={reduce ? undefined : { scale: 0.98 }}
               >
                 <Image
                   src={d.image}
@@ -359,7 +359,7 @@ export function CompetitionHero({
         </div>
       </div>
 
-      <div className="relative z-10 mx-auto mt-1 w-full min-w-0 max-w-[1200px] px-3 sm:mt-2 sm:px-5 lg:px-6">
+      <div className="relative z-10 mx-auto mt-1 w-full min-w-0 max-w-[1200px] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:mt-2 sm:px-5 lg:px-6">
         <div
           className="min-w-0 rounded-2xl border border-[rgb(255_200_120/0.22)] bg-[linear-gradient(120deg,rgb(22_8_8/0.88),rgb(10_3_3/0.72))] px-3 py-2.5 shadow-[inset_0_1px_0_rgb(255_255_255/0.06)] sm:px-4 sm:py-3"
           aria-labelledby="why-we-win-heading"
