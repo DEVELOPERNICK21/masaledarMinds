@@ -20,7 +20,7 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   title: "Masaledar Minds | Free Fire Masterchef Competition",
   description:
-    "Masaledar Minds — Free Fire Masterchef Competition. Five no-fire dishes: Bajeel Prasadam, chilled platter, mango elixir, citrus fusion, and power protein bites.",
+    "Masaledar Minds — Where Flavor Meets Strategy. Five no-fire dishes engineered across taste, texture, and visual recall for the Free Fire Masterchef Competition.",
 };
 
 export default function RootLayout({

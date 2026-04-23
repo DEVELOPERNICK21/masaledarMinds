@@ -2,6 +2,10 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import {
+  CompetitionHero,
+  COMPETITION_HERO_AUTO_MS,
+} from "./components/CompetitionHero";
 
 type Dish = {
   id: string;
@@ -11,15 +15,17 @@ type Dish = {
   emoji: string;
   tag: string;
   ingredients: string[];
+  /** One-line hook for hero story card */
+  hook: string;
+  /** Short ingredient badges with emoji for hero (e.g. "🧀 Cheese") */
+  ingredientBadges: string[];
+  /** Overlay label on hero dish frame */
+  heroBadge: string;
   highlight: string;
 };
 
-const COMPETITION_NAME = "Free Fire Masterchef Competition";
-const TAGLINE =
-  "Warning: Humari dish addictive hai… zimmedari aapki!";
 const MASALEDAR_MINDS_SECTION_ID = "masaledar-minds";
-const MASALEDAR_MINDS_TAGLINE =
-  "The people adding flavor to every experience";
+const MASALEDAR_MINDS_TAGLINE = "Where Flavor Meets Strategy";
 
 const dishes: Dish[] = [
   {
@@ -31,6 +37,9 @@ const dishes: Dish[] = [
     emoji: "🟢",
     tag: "Starter",
     ingredients: ["Cheese", "Fruits", "Chilled Elements"],
+    hook: "Cold-built layers—cheese, fruit, chill—engineered for contrast.",
+    ingredientBadges: ["🧀 Cheese", "🍇 Fruits", "❄️ Chill"],
+    heroBadge: "Opening play",
     highlight:
       "Perfect balance of sweet, tangy, and creamy flavors.",
   },
@@ -42,6 +51,9 @@ const dishes: Dish[] = [
     emoji: "🟡",
     tag: "Traditional Sweet",
     ingredients: ["Poha", "Jaggery", "Coconut", "Ghee"],
+    hook: "Temple-sweet soul, zero flame—texture judges remember.",
+    ingredientBadges: ["🌾 Poha", "🍯 Jaggery", "🥥 Coconut"],
+    heroBadge: "Signature Dish",
     highlight:
       "Rich, flavorful experience made entirely without fire.",
   },
@@ -53,6 +65,9 @@ const dishes: Dish[] = [
     emoji: "🟠",
     tag: "Beverage",
     ingredients: ["Mango", "Lassi", "Dry Fruits"],
+    hook: "Lassi meets mango royalty—smooth, rich, built to linger.",
+    ingredientBadges: ["🥭 Mango", "🥛 Lassi", "🌰 Dry fruits"],
+    heroBadge: "House pour",
     highlight: "Refreshing, rich, and perfectly balanced.",
   },
   {
@@ -63,6 +78,9 @@ const dishes: Dish[] = [
     emoji: "🔵",
     tag: "Fresh Bowl",
     ingredients: ["Seasonal Fruits", "Citrus Notes", "Light Seasoning"],
+    hook: "Brightness stacked—flavor architecture in a bowl.",
+    ingredientBadges: ["🍊 Citrus", "🥗 Seasonal fruit", "✨ Light spice"],
+    heroBadge: "Fresh cut",
     highlight: "Burst of freshness with layered flavors.",
   },
   {
@@ -73,6 +91,9 @@ const dishes: Dish[] = [
     emoji: "🟣",
     tag: "Protein Snack",
     ingredients: ["Paneer", "Fresh Greens", "Seasoning"],
+    hook: "High-protein, no-fire, crunch balance in every bite.",
+    ingredientBadges: ["🧀 Paneer", "🥬 Greens", "🧂 Seasoning"],
+    heroBadge: "Power lane",
     highlight:
       "Designed to deliver nutrition, texture, and flavor.",
   },
@@ -128,108 +149,6 @@ const signatureFocus = [
 
 const dishReadGuide = ["Select a dish", "See the plate", "Read key flavors"];
 
-const heroTitleLastSpace = COMPETITION_NAME.lastIndexOf(" ");
-const heroTitleLead =
-  heroTitleLastSpace > 0
-    ? COMPETITION_NAME.slice(0, heroTitleLastSpace)
-    : COMPETITION_NAME;
-const heroTitleTail =
-  heroTitleLastSpace > 0
-    ? COMPETITION_NAME.slice(heroTitleLastSpace + 1)
-    : "";
-
-function TypewriterTagline() {
-  const [text, setText] = useState("");
-
-  useEffect(() => {
-    let i = 0;
-    const id = setInterval(() => {
-      i += 1;
-      setText(TAGLINE.slice(0, i));
-      if (i >= TAGLINE.length) clearInterval(id);
-    }, 40);
-    return () => clearInterval(id);
-  }, []);
-
-  return (
-    <p className="hero-tagline" aria-label={TAGLINE}>
-      {text}
-      <span className="hero-tagline-cursor" aria-hidden>
-        |
-      </span>
-    </p>
-  );
-}
-
-const HERO_DISH_INTERVAL_MS = 3200;
-
-function HeroDishPopper() {
-  const [index, setIndex] = useState(0);
-  const dish = dishes[index];
-
-  useEffect(() => {
-    const t = setInterval(() => {
-      setIndex((i) => (i + 1) % dishes.length);
-    }, HERO_DISH_INTERVAL_MS);
-    return () => clearInterval(t);
-  }, []);
-
-  return (
-    <aside
-      className="hero-dish-stage"
-      aria-label="Menu preview, dishes rotate"
-      style={
-        { "--hero-dish-ms": `${HERO_DISH_INTERVAL_MS}ms` } as React.CSSProperties
-      }
-    >
-      <div className="hero-dish-stage-header">
-        <span className="hero-dish-stage-kicker">Live preview</span>
-        <span className="hero-dish-stage-title">On the pass</span>
-      </div>
-      <div key={dish.id} className="hero-dish-floating-card">
-        <div className="hero-dish-floating-glow" aria-hidden />
-        <div className="hero-dish-floating-frame">
-          <div className="hero-dish-floating-media">
-            <Image
-              src={dish.image}
-              alt={dish.name}
-              width={640}
-              height={360}
-              className="hero-dish-floating-image"
-              sizes="(min-width: 1280px) 380px, (min-width: 768px) 42vw, 100vw"
-              priority={index === 0}
-            />
-          </div>
-          <div className="hero-dish-floating-body">
-            <p className="hero-dish-floating-tag">{dish.tag}</p>
-            <p className="hero-dish-floating-name">{dish.name}</p>
-            <p className="hero-dish-floating-sub">{dish.subtitle}</p>
-          </div>
-        </div>
-        <div className="hero-dish-progress" aria-hidden>
-          <div key={dish.id} className="hero-dish-progress-fill" />
-        </div>
-      </div>
-      <p className="sr-only" aria-live="polite" aria-atomic="true">
-        Now showing: {dish.name}
-      </p>
-      <div className="hero-dish-dots" role="tablist" aria-label="Choose dish">
-        {dishes.map((d, i) => (
-          <button
-            key={d.id}
-            type="button"
-            role="tab"
-            aria-selected={i === index}
-            aria-label={`Show ${d.name}`}
-            className={`hero-dish-dot ${i === index ? "hero-dish-dot--active" : ""}`}
-            onClick={() => setIndex(i)}
-          />
-        ))}
-      </div>
-    </aside>
-  );
-}
-
 export default function Home() {
   const [selectedDishId, setSelectedDishId] = useState(dishes[0].id);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
@@ -242,13 +161,20 @@ export default function Home() {
     (dish) => dish.id === selectedDish.id,
   );
 
+  const selectDishByIndex = (index: number) => {
+    const i = ((index % dishes.length) + dishes.length) % dishes.length;
+    setSelectedDishId(dishes[i].id);
+    setIsAutoPlay(false);
+    setShowAllIngredients(false);
+  };
+
   useEffect(() => {
     if (!isAutoPlay) return;
     const timer = setInterval(() => {
       const next = (selectedDishIndex + 1) % dishes.length;
       setSelectedDishId(dishes[next].id);
       setShowAllIngredients(false);
-    }, 3200);
+    }, COMPETITION_HERO_AUTO_MS);
     return () => clearInterval(timer);
   }, [isAutoPlay, selectedDishIndex]);
 
@@ -277,32 +203,35 @@ export default function Home() {
           className="site-brand-logo"
           priority
         />
-        <span className="site-brand-text">Team Masaledar Minds</span>
+        <div className="site-brand-copy">
+          <span className="site-brand-text">Masaledar Minds</span>
+          <span className="site-brand-strategy">{MASALEDAR_MINDS_TAGLINE}</span>
+        </div>
       </header>
 
       <nav className="scene-nav section-nav-rail" aria-label="On this page">
         <a href="#hero" className="section-nav-link">
           <span className="section-nav-num">01</span>
-          <span className="section-nav-label">Hero</span>
+          <span className="section-nav-label">Intro</span>
         </a>
         <a
           href={`#${MASALEDAR_MINDS_SECTION_ID}`}
           className="section-nav-link"
         >
           <span className="section-nav-num">02</span>
-          <span className="section-nav-label">Masaledar Minds</span>
+          <span className="section-nav-label">Team</span>
         </a>
         <a href="#spotlight" className="section-nav-link">
           <span className="section-nav-num">03</span>
-          <span className="section-nav-label">Dishes</span>
+          <span className="section-nav-label">Menu</span>
         </a>
         <a href="#signature" className="section-nav-link">
           <span className="section-nav-num">04</span>
-          <span className="section-nav-label">Signature</span>
+          <span className="section-nav-label">Anchor</span>
         </a>
         <a href="#standout" className="section-nav-link">
           <span className="section-nav-num">05</span>
-          <span className="section-nav-label">Stand out</span>
+          <span className="section-nav-label">Edge</span>
         </a>
       </nav>
 
@@ -315,55 +244,14 @@ export default function Home() {
           id="hero"
           className="cinema-scene hero-scene section-pad snap-start"
         >
-          <div className="cinema-inner hero-experience-grid">
-            <div className="hero-copy-panel">
-              <div className="hero-eyebrow">
-                <span className="hero-eyebrow-line" aria-hidden />
-                <span>Competition entry</span>
-              </div>
-              <p className="hero-team-title">Team Masaledar Minds</p>
-              <h1 id="page-title" className="hero-competition-title text-balance">
-                <span className="hero-competition-primary">{heroTitleLead}</span>
-                {heroTitleTail ? (
-                  <span className="hero-competition-secondary">
-                    {heroTitleTail}
-                  </span>
-                ) : null}
-              </h1>
-              <div className="hero-tagline-well">
-                <TypewriterTagline />
-              </div>
-              <p className="hero-lede type-body max-w-[40rem] text-pretty text-[var(--hero-muted)]">
-                Five no-fire dishes engineered for clarity, contrast, and judge
-                recall—taste, texture, and plating in one cohesive story.
-              </p>
-              <ul className="hero-stat-row" aria-label="Quick facts">
-                <li className="hero-stat-card">
-                  <span className="hero-stat-value">5</span>
-                  <span className="hero-stat-label">Dishes</span>
-                </li>
-                <li className="hero-stat-card">
-                  <span className="hero-stat-value">0</span>
-                  <span className="hero-stat-label">Heat used</span>
-                </li>
-                <li className="hero-stat-card">
-                  <span className="hero-stat-value">100%</span>
-                  <span className="hero-stat-label">No-fire</span>
-                </li>
-              </ul>
-              <div className="hero-actions">
-                <a
-                  href={`#${MASALEDAR_MINDS_SECTION_ID}`}
-                  className="hero-cta-primary"
-                >
-                  Masaledar Minds
-                </a>
-                <a href="#spotlight" className="hero-cta-secondary">
-                  Explore dishes
-                </a>
-              </div>
-            </div>
-            <HeroDishPopper />
+          <div className="cinema-inner">
+            <CompetitionHero
+              dishes={dishes}
+              activeIndex={selectedDishIndex}
+              onSelectIndex={selectDishByIndex}
+              autoRotate={isAutoPlay}
+              onToggleAutoRotate={() => setIsAutoPlay((p) => !p)}
+            />
           </div>
         </section>
 
@@ -373,14 +261,16 @@ export default function Home() {
           aria-labelledby="masaledar-minds-heading"
         >
           <div className="cinema-inner magic-minds-inner">
-            <p className="magic-minds-eyebrow">02 — Masaledar Minds</p>
+            <p className="magic-minds-eyebrow">02 — The team</p>
             <h2
               id="masaledar-minds-heading"
               className="magic-minds-heading type-heading"
             >
               Masaledar Minds
             </h2>
-            <p className="magic-minds-tagline">{MASALEDAR_MINDS_TAGLINE}</p>
+            <p className="magic-minds-tagline">
+              The crew behind the plates—same discipline, louder story.
+            </p>
             <div className="magic-minds-frame">
               <Image
                 src="/images/magic-minds-masaledar.jpeg"
@@ -389,7 +279,6 @@ export default function Home() {
                 height={900}
                 className="magic-minds-image"
                 sizes="(min-width: 768px) 520px, 88vw"
-                priority
               />
             </div>
           </div>
@@ -402,7 +291,7 @@ export default function Home() {
                 03 — Dishes
               </p>
               <h2 className="section-title type-heading text-4xl font-black text-white sm:text-5xl">
-                Dish detail explorer
+                Experience the menu
               </h2>
               <div className="clarity-row mt-3">
                 {dishReadGuide.map((point) => (
