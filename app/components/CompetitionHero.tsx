@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import {
   AnimatePresence,
   motion,
@@ -21,6 +22,13 @@ const HERO_HEADLINE_TAIL = "We Engineer Taste.";
 const HERO_SUBLINE =
   "A no-fire system built for taste, texture, and recall.";
 
+const WARNING_TAGLINE =
+  "Warning: Humari dish addictive hai… zimmedari aapki!";
+/** Only this prefix is styled red; rest of the line stays accent pink. */
+const WARNING_PREFIX = "Warning:";
+
+const TYPEWRITER_MS = 38;
+
 const DIMENSIONS = [
   { icon: "🍽", label: "Taste" },
   { icon: "🧊", label: "Texture" },
@@ -37,11 +45,56 @@ const WHY_WE_WIN = [
 /** Keep in sync with `useEffect` interval in `page.tsx` (hero + menu spotlight). */
 export const COMPETITION_HERO_AUTO_MS = 4200;
 
+function TypewriterWarningLine({ revealInstantly }: { revealInstantly: boolean }) {
+  const [typed, setTyped] = useState("");
+
+  useEffect(() => {
+    if (revealInstantly) return;
+    let i = 0;
+    const id = setInterval(() => {
+      i += 1;
+      setTyped(WARNING_TAGLINE.slice(0, i));
+      if (i >= WARNING_TAGLINE.length) clearInterval(id);
+    }, TYPEWRITER_MS);
+    return () => clearInterval(id);
+  }, [revealInstantly]);
+
+  const text = revealInstantly ? WARNING_TAGLINE : typed;
+  const typing = !revealInstantly && text.length < WARNING_TAGLINE.length;
+  const prefixLen = WARNING_PREFIX.length;
+  const redPart = text.slice(0, Math.min(text.length, prefixLen));
+  const restPart = text.slice(prefixLen);
+
+  return (
+    <div
+      className="w-full max-w-xl min-w-0 rounded-xl border border-[rgb(255_200_140/0.18)] bg-[linear-gradient(165deg,rgb(255_255_255/7%),rgb(255_255_255/2%))] px-3 py-2.5 shadow-[inset_0_1px_0_rgb(255_255_255/0.08)] sm:px-4 sm:py-3.5"
+      role="status"
+      aria-live="polite"
+    >
+      <p
+        className="min-h-[2.75rem] font-[family-name:var(--font-caveat)] text-[clamp(1.05rem,4.2vw,1.5rem)] font-semibold leading-snug text-[#ffb8c3] drop-shadow-[0_1px_10px_rgb(0_0_0/0.45)] sm:min-h-[3rem]"
+        aria-label={WARNING_TAGLINE}
+      >
+        <span className="font-semibold text-[#ff3d4a]">{redPart}</span>
+        <span>{restPart}</span>
+        {typing ? (
+          <span
+            className="ml-0.5 inline-block font-bold text-[#ffd0d8] motion-safe:animate-pulse"
+            aria-hidden
+          >
+            |
+          </span>
+        ) : null}
+      </p>
+    </div>
+  );
+}
+
 const ctaPrimaryClass =
-  "relative inline-flex min-h-[3rem] items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-[#ffb347] via-[#ff7a1c] to-[#ff5a6a] px-8 text-[0.72rem] font-extrabold uppercase tracking-[0.14em] text-[#1a0505] shadow-[0_4px_0_rgb(120_30_10/35%),0_14px_36px_rgb(255_100_40/28%)] transition-shadow duration-200";
+  "relative inline-flex w-full min-h-[3rem] items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-[#ffb347] via-[#ff7a1c] to-[#ff5a6a] px-5 text-[0.68rem] font-extrabold uppercase tracking-[0.12em] text-[#1a0505] shadow-[0_4px_0_rgb(120_30_10/35%),0_14px_36px_rgb(255_100_40/28%)] transition-shadow duration-200 sm:w-auto sm:px-8 sm:text-[0.72rem] sm:tracking-[0.14em]";
 
 const ctaSecondaryClass =
-  "inline-flex min-h-[3rem] items-center justify-center rounded-full border border-[rgb(255_200_130/40%)] bg-[rgb(255_255_255/6%)] px-7 text-[0.72rem] font-extrabold uppercase tracking-[0.12em] text-[rgb(255_240_224/95%)] backdrop-blur-sm transition-colors duration-200 hover:border-[rgb(255_215_150/55%)] hover:bg-[rgb(255_255_255/10%)]";
+  "inline-flex w-full min-h-[3rem] items-center justify-center rounded-full border border-[rgb(255_200_130/40%)] bg-[rgb(255_255_255/6%)] px-5 text-[0.68rem] font-extrabold uppercase tracking-[0.1em] text-[rgb(255_240_224/95%)] backdrop-blur-sm transition-colors duration-200 hover:border-[rgb(255_215_150/55%)] hover:bg-[rgb(255_255_255/10%)] sm:w-auto sm:px-7 sm:text-[0.72rem] sm:tracking-[0.12em]";
 
 type CompetitionHeroProps = {
   dishes: CompetitionHeroDish[];
@@ -107,90 +160,89 @@ export function CompetitionHero({
   const indexLabel = `${String(activeIndex + 1).padStart(2, "0")} / ${String(dishes.length).padStart(2, "0")}`;
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full min-w-0 overflow-x-hidden">
       <HeroAmbientMotion />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-[1200px] flex-col gap-8 px-4 pb-6 pt-2 sm:px-5 lg:grid lg:grid-cols-12 lg:items-center lg:gap-x-10 lg:gap-y-6 lg:px-6">
+      <div className="relative z-10 mx-auto flex w-full min-w-0 max-w-[1200px] flex-col gap-6 px-3 pb-5 pt-1 sm:gap-8 sm:px-5 sm:pb-6 sm:pt-2 lg:grid lg:grid-cols-12 lg:items-center lg:gap-x-8 lg:gap-y-6 lg:px-6 xl:gap-x-10">
         {/* Copy: first on mobile (order-1), right column on desktop */}
-        <div className="order-1 flex flex-col gap-4 lg:order-2 lg:col-span-7 lg:gap-5">
-          <div className="flex items-center gap-2">
+        <div className="order-1 flex min-w-0 w-full flex-col gap-3 sm:gap-4 lg:order-2 lg:col-span-7 lg:gap-5">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
             <span
-              className="h-px w-8 bg-gradient-to-r from-[#ffc14a] to-transparent"
+              className="h-px w-6 shrink-0 bg-gradient-to-r from-[#ffc14a] to-transparent sm:w-8"
               aria-hidden
             />
-            <p className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[rgb(255_210_150/0.78)]">
+            <p className="min-w-0 text-[0.58rem] font-bold uppercase leading-snug tracking-[0.14em] text-[rgb(255_210_150/0.78)] sm:text-[0.62rem] sm:tracking-[0.22em]">
               Masaledar Minds · No-fire
             </p>
           </div>
 
           <h1
             id="page-title"
-            className="font-[family-name:var(--font-playfair)] text-balance text-[clamp(2.1rem,5.2vw+0.2rem,3.85rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-[#fff9f2] drop-shadow-[0_2px_0_rgb(0_0_0/0.35)]"
+            className="break-words font-[family-name:var(--font-playfair)] text-balance text-[clamp(1.65rem,7.5vw+0.15rem,3.85rem)] font-extrabold leading-[1.02] tracking-[-0.035em] text-[#fff9f2] drop-shadow-[0_2px_0_rgb(0_0_0/0.35)] sm:text-[clamp(2.1rem,5.2vw+0.2rem,3.85rem)]"
           >
             <span className="block">{HERO_HEADLINE_LEAD}</span>
-            <span className="mt-1 block bg-gradient-to-r from-[#ffd875] via-[#ffb347] to-[#ff9a6c] bg-clip-text font-[family-name:var(--font-playfair)] text-[clamp(1.45rem,3.8vw+0.15rem,2.75rem)] text-transparent drop-shadow-none">
+            <span className="mt-1 block bg-gradient-to-r from-[#ffd875] via-[#ffb347] to-[#ff9a6c] bg-clip-text font-[family-name:var(--font-playfair)] text-[clamp(1.2rem,5.5vw+0.1rem,2.75rem)] text-transparent drop-shadow-none sm:mt-1 sm:text-[clamp(1.45rem,3.8vw+0.15rem,2.75rem)]">
               {HERO_HEADLINE_TAIL}
             </span>
           </h1>
 
-          <p className="max-w-xl text-[0.95rem] font-semibold leading-snug tracking-[-0.01em] text-[rgb(255_236_220/0.92)] sm:text-base">
+          <p className="max-w-xl text-[0.88rem] font-semibold leading-snug tracking-[-0.01em] text-[rgb(255_236_220/0.92)] sm:text-[0.95rem] sm:text-base">
             {HERO_SUBLINE}
           </p>
 
+          <TypewriterWarningLine
+            key={reduce ? "instant" : "type"}
+            revealInstantly={!!reduce}
+          />
+
           <ul
-            className="flex flex-wrap gap-2"
+            className="grid w-full min-w-0 grid-cols-3 gap-2"
             aria-label="Engineering dimensions"
           >
             {DIMENSIONS.map((dim) => (
               <li
                 key={dim.label}
-                className="inline-flex items-center gap-2 rounded-full border border-[rgb(255_200_130/0.28)] bg-[rgb(12_4_4/0.72)] px-3 py-2 text-[0.68rem] font-bold uppercase tracking-[0.08em] text-[rgb(255_244_230/0.96)]"
+                className="flex min-w-0 items-center justify-center gap-1.5 rounded-full border border-[rgb(255_200_130/0.28)] bg-[rgb(12_4_4/0.72)] px-1.5 py-2 text-[0.58rem] font-bold uppercase leading-tight tracking-[0.04em] text-[rgb(255_244_230/0.96)] sm:gap-2 sm:px-3 sm:text-[0.68rem] sm:tracking-[0.08em]"
               >
-                <span className="text-base leading-none" aria-hidden>
+                <span className="shrink-0 text-sm leading-none sm:text-base" aria-hidden>
                   {dim.icon}
                 </span>
-                {dim.label}
+                <span className="min-w-0 text-center break-words">{dim.label}</span>
               </li>
             ))}
           </ul>
 
           <div
-            className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-y border-[rgb(255_200_120/0.2)] py-4 font-[family-name:var(--font-playfair)] sm:gap-x-5"
+            className="grid w-full min-w-0 grid-cols-3 gap-1 border-y border-[rgb(255_200_120/0.2)] py-3 text-center font-[family-name:var(--font-playfair)] sm:gap-2 sm:py-4"
             aria-label="Competition stats"
           >
-            <span className="text-[clamp(1.75rem,3.5vw,2.35rem)] font-black tabular-nums tracking-tight text-[#ffc14a]">
-              5
-              <span className="ml-1.5 text-[0.55rem] font-bold uppercase tracking-[0.14em] text-[rgb(232_210_198/0.75)] sm:text-[0.62rem]">
+            <div className="flex min-w-0 flex-col items-center justify-center gap-0.5 border-r border-[rgb(255_200_120/0.15)] pr-1 sm:pr-2">
+              <span className="text-[clamp(1.35rem,6.5vw,2.35rem)] font-black tabular-nums leading-none tracking-tight text-[#ffc14a]">
+                5
+              </span>
+              <span className="text-[0.48rem] font-bold uppercase leading-tight tracking-[0.08em] text-[rgb(232_210_198/0.75)] sm:text-[0.55rem] sm:tracking-[0.12em] md:text-[0.62rem]">
                 Dishes
               </span>
-            </span>
-            <span
-              className="hidden text-[rgb(255_200_130/0.35)] sm:inline"
-              aria-hidden
-            >
-              |
-            </span>
-            <span className="text-[clamp(1.75rem,3.5vw,2.35rem)] font-black tabular-nums tracking-tight text-[#ffc14a]">
-              0
-              <span className="ml-1.5 text-[0.55rem] font-bold uppercase tracking-[0.14em] text-[rgb(232_210_198/0.75)] sm:text-[0.62rem]">
+            </div>
+            <div className="flex min-w-0 flex-col items-center justify-center gap-0.5 border-r border-[rgb(255_200_120/0.15)] px-1 sm:px-2">
+              <span className="text-[clamp(1.35rem,6.5vw,2.35rem)] font-black tabular-nums leading-none tracking-tight text-[#ffc14a]">
+                0
+              </span>
+              <span className="text-[0.48rem] font-bold uppercase leading-tight tracking-[0.08em] text-[rgb(232_210_198/0.75)] sm:text-[0.55rem] sm:tracking-[0.12em] md:text-[0.62rem]">
                 Heat
               </span>
-            </span>
-            <span
-              className="hidden text-[rgb(255_200_130/0.35)] sm:inline"
-              aria-hidden
-            >
-              |
-            </span>
-            <span className="text-[clamp(1.75rem,3.5vw,2.35rem)] font-black tabular-nums tracking-tight text-[#ffc14a]">
-              3
-              <span className="ml-1.5 text-[0.55rem] font-bold uppercase tracking-[0.14em] text-[rgb(232_210_198/0.75)] sm:text-[0.62rem]">
+            </div>
+            <div className="flex min-w-0 flex-col items-center justify-center gap-0.5 pl-1 sm:pl-2">
+              <span className="text-[clamp(1.35rem,6.5vw,2.35rem)] font-black tabular-nums leading-none tracking-tight text-[#ffc14a]">
+                3
+              </span>
+              <span className="max-w-full text-[0.48rem] font-bold uppercase leading-tight tracking-[0.06em] text-[rgb(232_210_198/0.75)] sm:text-[0.55rem] sm:tracking-[0.12em] md:text-[0.62rem]">
                 Dimensions
               </span>
-            </span>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <div className="flex w-full min-w-0 flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
             <motion.a
               href={`#${spotlightId}`}
               className={ctaPrimaryClass}
@@ -223,9 +275,9 @@ export function CompetitionHero({
         </div>
 
         {/* Image column: second on mobile, left on desktop */}
-        <div className="order-2 w-full max-w-md shrink-0 justify-self-center lg:order-1 lg:col-span-5 lg:max-w-none lg:justify-self-stretch">
+        <div className="order-2 w-full min-w-0 max-w-full shrink-0 justify-self-center sm:max-w-md lg:order-1 lg:col-span-5 lg:max-w-none lg:justify-self-stretch">
           <motion.div
-            className="relative mx-auto w-full max-w-[20rem] lg:max-w-none"
+            className="relative mx-auto w-full max-w-[min(100%,20rem)] lg:max-w-none"
             animate={reduce ? { y: 0 } : { y: [0, -7, 0] }}
             transition={
               reduce
@@ -258,14 +310,14 @@ export function CompetitionHero({
                   className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[rgb(5_1_1/0.92)] via-[rgb(5_1_1/0.15)] to-transparent"
                   aria-hidden
                 />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4 sm:p-5">
-                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.28em] text-[rgb(255_210_150/0.85)]">
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 p-3 sm:p-5">
+                  <p className="text-[0.58rem] font-bold uppercase tracking-[0.2em] text-[rgb(255_210_150/0.85)] sm:text-[0.65rem] sm:tracking-[0.28em]">
                     {indexLabel}
                   </p>
-                  <p className="mt-2 font-[family-name:var(--font-playfair)] text-[clamp(1.05rem,2.4vw,1.35rem)] font-extrabold leading-tight tracking-[-0.02em] text-[#fff9f2]">
+                  <p className="mt-1.5 line-clamp-3 break-words font-[family-name:var(--font-playfair)] text-[clamp(0.95rem,3.5vw,1.35rem)] font-extrabold leading-tight tracking-[-0.02em] text-[#fff9f2] sm:mt-2">
                     {dish.name}
                   </p>
-                  <p className="mt-2 inline-flex rounded-full border border-[rgb(255_200_130/0.45)] bg-[rgb(8_2_2/0.65)] px-3 py-1 text-[0.58rem] font-bold uppercase tracking-[0.18em] text-[#ffd875] backdrop-blur-sm">
+                  <p className="mt-1.5 inline-flex max-w-full rounded-full border border-[rgb(255_200_130/0.45)] bg-[rgb(8_2_2/0.65)] px-2.5 py-0.5 text-[0.52rem] font-bold uppercase tracking-[0.14em] text-[#ffd875] backdrop-blur-sm sm:mt-2 sm:px-3 sm:py-1 sm:text-[0.58rem] sm:tracking-[0.18em]">
                     {dish.heroBadge}
                   </p>
                 </div>
@@ -274,7 +326,7 @@ export function CompetitionHero({
           </motion.div>
 
           <div
-            className="mt-3 flex flex-wrap justify-center gap-2"
+            className="mt-2.5 flex w-full min-w-0 flex-wrap justify-center gap-1.5 sm:mt-3 sm:gap-2"
             role="tablist"
             aria-label="Select a dish"
           >
@@ -286,7 +338,7 @@ export function CompetitionHero({
                 aria-selected={i === activeIndex}
                 aria-label={`Show ${d.name}`}
                 onClick={() => onSelectIndex(i)}
-                className={`relative h-14 w-14 overflow-hidden rounded-xl border-2 transition-colors sm:h-16 sm:w-16 ${
+                className={`relative h-11 w-11 shrink-0 overflow-hidden rounded-lg border-2 transition-colors sm:h-14 sm:w-14 sm:rounded-xl md:h-16 md:w-16 ${
                   i === activeIndex
                     ? "border-[#ffc14a] shadow-[0_0_0_1px_rgb(255_200_100/0.35)]"
                     : "border-[rgb(255_255_255/0.12)] hover:border-[rgb(255_200_120/0.45)]"
@@ -307,9 +359,9 @@ export function CompetitionHero({
         </div>
       </div>
 
-      <div className="relative z-10 mx-auto mt-2 w-full max-w-[1200px] px-4 sm:px-5 lg:px-6">
+      <div className="relative z-10 mx-auto mt-1 w-full min-w-0 max-w-[1200px] px-3 sm:mt-2 sm:px-5 lg:px-6">
         <div
-          className="rounded-2xl border border-[rgb(255_200_120/0.22)] bg-[linear-gradient(120deg,rgb(22_8_8/0.88),rgb(10_3_3/0.72))] px-4 py-3 shadow-[inset_0_1px_0_rgb(255_255_255/0.06)]"
+          className="min-w-0 rounded-2xl border border-[rgb(255_200_120/0.22)] bg-[linear-gradient(120deg,rgb(22_8_8/0.88),rgb(10_3_3/0.72))] px-3 py-2.5 shadow-[inset_0_1px_0_rgb(255_255_255/0.06)] sm:px-4 sm:py-3"
           aria-labelledby="why-we-win-heading"
         >
           <p

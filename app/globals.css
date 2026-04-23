@@ -1418,6 +1418,16 @@ body {
 .cinema-scene.hero-scene {
   padding-top: 4.75rem;
   padding-bottom: 2rem;
+  /* Tall hero + vertical center = clipped on small viewports; start-align on mobile */
+  align-items: start;
+  min-height: auto;
+}
+
+@media (min-width: 1024px) {
+  .cinema-scene.hero-scene {
+    align-items: center;
+    min-height: 100svh;
+  }
 }
 
 .hero-copy-panel {
