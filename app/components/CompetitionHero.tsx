@@ -28,6 +28,9 @@ const WARNING_TAGLINE =
 const WARNING_PREFIX = "Warning:";
 
 const TYPEWRITER_MS = 38;
+const TYPEWRITER_DELETE_MS = 22;
+const TYPEWRITER_PAUSE_END_MS = 2000;
+const TYPEWRITER_PAUSE_RESTART_MS = 450;
 
 const DIMENSIONS = [
   { icon: "🍽", label: "Taste" },
@@ -50,17 +53,45 @@ function TypewriterWarningLine({ revealInstantly }: { revealInstantly: boolean }
 
   useEffect(() => {
     if (revealInstantly) return;
-    let i = 0;
-    const id = setInterval(() => {
-      i += 1;
-      setTyped(WARNING_TAGLINE.slice(0, i));
-      if (i >= WARNING_TAGLINE.length) clearInterval(id);
-    }, TYPEWRITER_MS);
-    return () => clearInterval(id);
+
+    let cancelled = false;
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    const schedule = (delay: number, fn: () => void) => {
+      timeoutId = setTimeout(() => {
+        if (!cancelled) fn();
+      }, delay);
+    };
+
+    const tickType = (i: number) => {
+      if (i >= WARNING_TAGLINE.length) {
+        schedule(TYPEWRITER_PAUSE_END_MS, () => tickDelete(WARNING_TAGLINE.length));
+        return;
+      }
+      setTyped(WARNING_TAGLINE.slice(0, i + 1));
+      schedule(TYPEWRITER_MS, () => tickType(i + 1));
+    };
+
+    const tickDelete = (i: number) => {
+      if (i <= 0) {
+        setTyped("");
+        schedule(TYPEWRITER_PAUSE_RESTART_MS, () => tickType(0));
+        return;
+      }
+      setTyped(WARNING_TAGLINE.slice(0, i - 1));
+      schedule(TYPEWRITER_DELETE_MS, () => tickDelete(i - 1));
+    };
+
+    schedule(0, () => tickType(0));
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timeoutId);
+    };
   }, [revealInstantly]);
 
   const text = revealInstantly ? WARNING_TAGLINE : typed;
-  const typing = !revealInstantly && text.length < WARNING_TAGLINE.length;
+  const typing = !revealInstantly;
   const prefixLen = WARNING_PREFIX.length;
   const redPart = text.slice(0, Math.min(text.length, prefixLen));
   const restPart = text.slice(prefixLen);
@@ -68,8 +99,7 @@ function TypewriterWarningLine({ revealInstantly }: { revealInstantly: boolean }
   return (
     <div
       className="w-full max-w-xl min-w-0 rounded-xl border border-[rgb(255_200_140/0.18)] bg-[linear-gradient(165deg,rgb(255_255_255/7%),rgb(255_255_255/2%))] px-3 py-2.5 shadow-[inset_0_1px_0_rgb(255_255_255/0.08)] sm:px-4 sm:py-3.5"
-      role="status"
-      aria-live="polite"
+      aria-live="off"
     >
       <p
         className="min-h-[2.75rem] font-[family-name:var(--font-caveat)] text-[clamp(1.05rem,4.2vw,1.5rem)] font-semibold leading-snug text-[#ffb8c3] drop-shadow-[0_1px_10px_rgb(0_0_0/0.45)] sm:min-h-[3rem]"

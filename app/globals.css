@@ -2038,17 +2038,58 @@ body {
 @keyframes leafForestIdle {
   0%,
   100% {
-    filter: brightness(0.92);
+    filter: brightness(0.88) saturate(1.05);
     transform: translate(-50%, -50%) rotate(var(--leaf-rot)) scale(var(--leaf-sc));
   }
+  33% {
+    filter: brightness(1.08) saturate(1.12);
+    transform: translate(-50%, -50%) translate(0, -3px)
+      rotate(calc(var(--leaf-rot) + 4deg)) scale(calc(var(--leaf-sc) * 1.04));
+  }
+  66% {
+    filter: brightness(0.96) saturate(1.08);
+    transform: translate(-50%, -50%) translate(0, 2px)
+      rotate(calc(var(--leaf-rot) - 3deg)) scale(calc(var(--leaf-sc) * 0.98));
+  }
+}
+
+@keyframes loaderMistDrift {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1) translate(0, 0);
+  }
   50% {
-    filter: brightness(1.06);
-    transform: translate(-50%, -50%) rotate(calc(var(--leaf-rot) + 2deg))
-      scale(calc(var(--leaf-sc) * 1.03));
+    opacity: 0.62;
+    transform: scale(1.04) translate(1.5%, -1%);
+  }
+}
+
+@keyframes loaderAurora {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: rotate(6deg) scale(1.06);
+  }
+}
+
+@keyframes heroMidribShine {
+  0%,
+  100% {
+    stroke-opacity: 0.35;
+  }
+  50% {
+    stroke-opacity: 0.85;
   }
 }
 
 .banana-leaf-loader {
+  touch-action: none;
+  isolation: isolate;
   background:
     radial-gradient(ellipse 95% 55% at 50% 22%, rgb(45 95 48 / 0.45), transparent 58%),
     linear-gradient(180deg, #040201 0%, #0f0806 38%, #060302 100%);
@@ -2080,6 +2121,25 @@ body {
   );
 }
 
+.banana-leaf-loader__mist--drift {
+  mix-blend-mode: screen;
+  animation: loaderMistDrift 9s ease-in-out infinite;
+  opacity: 0.42;
+}
+
+.banana-leaf-loader__aurora {
+  position: absolute;
+  inset: -12%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+  background:
+    radial-gradient(ellipse 55% 40% at 20% 30%, rgb(255 180 90 / 0.12), transparent 55%),
+    radial-gradient(ellipse 50% 45% at 82% 65%, rgb(255 120 140 / 0.1), transparent 52%),
+    radial-gradient(ellipse 60% 50% at 50% 80%, rgb(60 160 90 / 0.14), transparent 58%);
+  animation: loaderAurora 14s ease-in-out infinite;
+}
+
 .banana-leaf-loader__canopy {
   position: absolute;
   inset: 0;
@@ -2090,10 +2150,58 @@ body {
 .banana-leaf-loader__leaf-wrap {
   position: absolute;
   z-index: 2;
-  opacity: 0.88;
+  opacity: 0.9;
   transform: translate(-50%, -50%) rotate(var(--leaf-rot)) scale(var(--leaf-sc));
-  animation: leafForestIdle 6s ease-in-out infinite;
+  animation: leafForestIdle 5.2s ease-in-out infinite;
   animation-delay: var(--leaf-delay);
+}
+
+.banana-leaf-loader__hero-stage {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.banana-leaf-loader__hero-ring {
+  position: absolute;
+  width: min(88vw, 26rem);
+  height: min(88vw, 26rem);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgb(80 200 110 / 0.22) 0%,
+    rgb(40 120 60 / 0.08) 42%,
+    transparent 68%
+  );
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.banana-leaf-loader__hero-hit {
+  position: relative;
+  z-index: 1;
+  cursor: grab;
+  pointer-events: auto;
+  filter: drop-shadow(0 12px 36px rgb(0 0 0 / 0.55)) drop-shadow(0 0 48px rgb(40 140 70 / 0.35));
+  transform-style: preserve-3d;
+}
+
+.banana-leaf-loader__hero-hit:active {
+  cursor: grabbing;
+}
+
+.banana-leaf-loader__hero-svg {
+  display: block;
+}
+
+.banana-leaf-loader__hero-midrib {
+  animation: heroMidribShine 2.4s ease-in-out infinite;
 }
 
 .banana-leaf-loader--exiting .banana-leaf-loader__leaf-wrap {
@@ -2109,7 +2217,7 @@ body {
 .banana-leaf-loader__veil {
   position: absolute;
   inset: 0;
-  z-index: 5;
+  z-index: 7;
   pointer-events: none;
   background: rgb(0 0 0 / 0%);
   transition: background 0.45s ease;
@@ -2121,9 +2229,10 @@ body {
 
 .banana-leaf-loader__title {
   position: relative;
-  z-index: 8;
+  z-index: 9;
   margin: 0;
-  padding-top: min(42vh, 14rem);
+  padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+  padding-top: 0.5rem;
   text-align: center;
   font-size: 0.72rem;
   font-weight: 800;
@@ -2140,5 +2249,14 @@ body {
 
   .banana-leaf-loader--exiting .banana-leaf-loader__leaf-wrap {
     animation-duration: 0.45s;
+  }
+
+  .banana-leaf-loader__mist--drift,
+  .banana-leaf-loader__aurora {
+    animation: none;
+  }
+
+  .banana-leaf-loader__hero-midrib {
+    animation: none;
   }
 }
